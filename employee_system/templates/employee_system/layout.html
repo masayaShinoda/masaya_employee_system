@@ -10,14 +10,14 @@
 <body>
     <header>
         <div>
-            {% comment %} {% if user.is_authenticated %}
-                Signed in as <strong>{{ user.username }}</strong>.
-            {% else %}
-                Not signed in.
-            {% endif %} {% endcomment %}
+        {% if user.is_authenticated %}
+            Signed in as <strong>{{ user.username }}</strong>.
+        {% else %}
+            Not signed in.
+        {% endif %}
         </div>
         <ul class="nav">
-            {% comment %} {% if user.is_authenticated %}
+            {% if user.is_authenticated %}
                 <li>
                     <a href="{% url 'logout' %}">Log Out</a>
                 </li>
@@ -25,7 +25,7 @@
                 <li>
                     <a href="{% url 'login' %}">Log In</a>
                 </li>
-            {% endif %} {% endcomment %}
+            {% endif %}
         </ul>
     </header>
     {% block body %}
