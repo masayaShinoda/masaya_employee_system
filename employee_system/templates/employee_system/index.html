@@ -1,0 +1,23 @@
+{% extends "employee_system/layout.html" %}
+
+{% block body %}
+
+{% comment %} {% if user.is_authenticated %}
+<main>
+    <section>
+        <h4>Welcome</h4>
+        <h3>{{ user.get_full_name }}</h3>
+    </section>
+</main>
+{% else %}
+<main>
+    <h2>Please Sign In</h2>
+</main>
+{% endif %} {% endcomment %}
+
+<main>
+    <h3>Hello, world!</h3>
+</main>
+
+
+{% endblock %}
