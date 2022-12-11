@@ -1,23 +1,193 @@
 {% extends "employee_system/layout.html" %}
+{% load static %}
 
 {% block body %}
 
-{% comment %} {% if user.is_authenticated %}
+{% if user.is_authenticated %}
 <main>
-    <section>
-        <h4>Welcome</h4>
-        <h3>{{ user.get_full_name }}</h3>
+    <section class="section_greetings">
+        <div class="section_greetings_content">
+            <div class="section_greetings_welcome">
+                <i id="section_greetings_icon" class="icon"></i>
+                <span class="section_greetings_text_span">
+                    <p id="text_greetings"></p>
+                    <script>
+                        let today = new Date()
+                        let curHr = today.getHours()
+                        
+                        if (curHr < 12) {
+                          document.getElementById("text_greetings").textContent = 'Good morning,'
+                          document.getElementById("section_greetings_icon").classList.add("icon_morning")
+                        } else if (curHr < 18) {
+                          document.getElementById("text_greetings").textContent = 'Good afternoon,'
+                          document.getElementById("section_greetings_icon").classList.add("icon_morning")
+                        } else {
+                          document.getElementById("text_greetings").textContent = 'Good evening,'
+                          document.getElementById("section_greetings_icon").classList.add("icon_evening")
+                        }
+                    </script>
+                    <h5>{{ user.get_full_name }}</h5>
+                </span>
+            </div>
+            <div class="section_greetings_buttons_wrapper">
+                
+            </div>
+        </div>
+    </section>
+    <section class="section_pie_charts">
+        {% if data.leave_balance %}
+            <div id="root_pie_charts"></div>
+        {% else %}
+        <p>Could not retreive leave balance. Please try again or contact technology department.</p>
+        {% endif %}
     </section>
 </main>
 {% else %}
 <main>
     <h2>Please Sign In</h2>
 </main>
-{% endif %} {% endcomment %}
-
-<main>
-    <h3>Hello, world!</h3>
-</main>
+{% endif %}
 
 
+
+<script defer src="{% static 'employee_system/js/chart.js-4.0.1/package/dist/chart.umd.min.js' %}"></script>
+<script type="text/javascript">
+    window.addEventListener('DOMContentLoaded', (event) => {
+        window.onload = async function() {
+            var $id = (id) => document.getElementById(id)
+            
+            const app = $id('root_pie_charts')
+            const pie_chart_cards_wrapper = document.createElement('div')
+            pie_chart_cards_wrapper.classList.add("pie_chart_cards_wrapper")
+
+            app.appendChild(pie_chart_cards_wrapper)
+
+            // Organize data from Django
+            let leave_data = {{ data.leave_balance | safe }}[0]['fields']
+            delete leave_data['user']
+
+            let leave_annual = {
+                id: "leave_annual",
+                name: "Annual Leave",
+                starting: leave_data.starting_leave_annual,
+                planned: leave_data.planned_leave_annual,
+                used: leave_data.used_leave_annual,
+                available: leave_data.starting_leave_annual - leave_data.planned_leave_annual - leave_data.used_leave_annual,
+            }
+            let leave_sick = {
+                id: "leave_sick",
+                name: "Sick Leave",
+                starting: leave_data.starting_leave_sick,
+                planned: leave_data.planned_leave_sick,
+                used: leave_data.used_leave_sick,
+                available: leave_data.starting_leave_sick - leave_data.planned_leave_sick - leave_data.used_leave_sick,
+            }
+            let leave_work_home = {
+                id: "leave_work_home",
+                name: "Work From Home",
+                starting: leave_data.starting_leave_work_home,
+                planned: leave_data.planned_leave_work_home,
+                used: leave_data.used_leave_work_home,
+                available: leave_data.starting_leave_work_home - leave_data.planned_leave_work_home - leave_data.used_leave_work_home,
+            }
+            let leave_maternity = {
+                id: "leave_maternity",
+                name: "Maternity Leave",
+                starting: leave_data.starting_leave_maternity,
+                planned: leave_data.planned_leave_maternity,
+                used: leave_data.used_leave_maternity,
+                available: leave_data.starting_leave_maternity - leave_data.planned_leave_maternity - leave_data.used_leave_maternity,
+            }
+            
+            let all_leave = [leave_annual, leave_sick, leave_work_home, leave_maternity]
+
+            all_leave.map(
+                i => {
+                    const data = [i.available, i.planned, i.used]
+                    const labels = ["Available", "Planned", "Taken"]
+                                        
+                    if(i.starting > 0) {
+                        const pie_chart_card = document.createElement('div')
+                        pie_chart_card.classList.add("pie_chart_card")
+    
+                        const pie_chart_card_heading = document.createElement('h3')
+                        pie_chart_card_heading.classList.add("pie_chart_card_title")
+                        pie_chart_card_heading.textContent = i.name
+                        
+                        const pie_chart_container = document.createElement('canvas')
+                        pie_chart_container.classList.add("pie_chart_container")
+                        pie_chart_container.id = `chart_container_${i.id}`
+                        
+                        const pie_chart_card_text_section = document.createElement('section')
+                        pie_chart_card_text_section.classList.add("pie_chart_card_text_section")
+
+                        const pie_chart_card_text_available = document.createElement('span')
+                        const pie_chart_card_text_available_heading = document.createElement('h5')
+                        pie_chart_card_text_available_heading.textContent = "Available"
+                        const pie_chart_card_text_available_value = document.createElement('p')
+                        pie_chart_card_text_available_value.textContent = i.available
+                        pie_chart_card_text_available.appendChild(pie_chart_card_text_available_heading)
+                        pie_chart_card_text_available.appendChild(pie_chart_card_text_available_value)
+
+
+                        const pie_chart_card_text_planned = document.createElement('span')
+                        const pie_chart_card_text_planned_heading = document.createElement('h5')
+                        pie_chart_card_text_planned_heading.textContent = "Planned"
+                        const pie_chart_card_text_planned_value = document.createElement('p')
+                        pie_chart_card_text_planned_value.textContent = i.planned
+                        pie_chart_card_text_planned.appendChild(pie_chart_card_text_planned_heading)
+                        pie_chart_card_text_planned.appendChild(pie_chart_card_text_planned_value)
+
+
+                        const pie_chart_card_text_taken = document.createElement('span')
+                        const pie_chart_card_text_taken_heading = document.createElement('h5')
+                        pie_chart_card_text_taken_heading.textContent = "Taken"
+                        const pie_chart_card_text_taken_value = document.createElement('p')
+                        pie_chart_card_text_taken_value.textContent = i.used
+                        pie_chart_card_text_taken.appendChild(pie_chart_card_text_taken_heading)
+                        pie_chart_card_text_taken.appendChild(pie_chart_card_text_taken_value)
+
+
+                        pie_chart_card_text_section.appendChild(pie_chart_card_text_available)
+                        pie_chart_card_text_section.appendChild(pie_chart_card_text_planned)
+                        pie_chart_card_text_section.appendChild(pie_chart_card_text_taken)
+
+
+                        pie_chart_card.appendChild(pie_chart_card_heading)
+                        pie_chart_card.appendChild(pie_chart_container)
+                        pie_chart_card.appendChild(pie_chart_card_text_section)
+
+                        pie_chart_cards_wrapper.appendChild(pie_chart_card)
+
+                        new Chart(
+                            document.getElementById(`chart_container_${i.id}`),
+                            {
+                                type: 'pie',
+                                data: {
+                                    labels: labels,
+                                    datasets: [
+                                        {
+                                            label: i.name,
+                                            data: data,
+                                        }
+                                    ]
+                                },
+                                options: {
+                                    plugins: {
+                                        legend: {
+                                            display: true,
+                                            position: 'right',
+                                        }
+                                    }
+                                }
+                            }
+                        )
+                    }
+                }
+            )
+   
+        }
+    })
+    
+</script>
 {% endblock %}

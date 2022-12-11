@@ -1,0 +1,36 @@
+/* Color utils */
+.utils.bg_gradient_primary {
+    background: linear-gradient(88.41deg, #252552 0%, #353575 100%);
+}
+.utils.bg_gradient_primary_shade_a {
+    background-image: linear-gradient(84.59deg, #353575 0%, #454598 100%);
+}
+.utils.clr_light {
+    color: var(--clr_light);
+}
+.utils.clr_primary {
+    color: var(--clr_primary);
+}
+.utils.clr_primary_shade_a {
+    color: var(--clr_primary_shade_a);
+}
+.utils.clr_secondary {
+    color: var(--clr_secondary);
+}
+
+/* Type utils */
+.utils.type_scale_1 {
+    font-size: var(--type_scale_1);
+}
+.utils.type_scale_2 {
+    font-size: var(--type_scale_2);
+}
+.utils.type_scale_3 {
+    font-size: var(--type_scale_3);
+}
+.utils.type_scale_4 {
+    font-size: var(--type_scale_4);
+}
+.utils.type_scale_5 {
+    font-size: var(--type_scale_5);
+}

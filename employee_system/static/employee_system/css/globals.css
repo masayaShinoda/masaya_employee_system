@@ -1,0 +1,63 @@
+@import "./reset.css";
+@import "./_variables.css";
+@import "./typography.css";
+@import "./icons.css";
+@import "./utils.css";
+@import "./components.css";
+
+/* Page specific */
+@import "./index.css";
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  /* font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif; */
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* @media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+  body {
+    color: #fff;
+    background: #000;
+  }
+} */
+
+body {
+  /* debug */
+  width: 100%;
+  max-width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font_primary);
+}
+body.dark {
+  background-color: #000;
+}
+
+/* Modify animate.css variable */
+:root {
+  --animate-delay: 0.25s;
+}
+
+main {
+  flex-grow: 1; /* reason: make sure <main> stretches to fill everything between header and footer */
+  /* outline: 1px solid red; */
+  width: 100%;
+  max-width: 100%;
+}

@@ -1,0 +1,71 @@
+:root {
+    --clr_primary_ut_market: #1B2266;
+    --clr_primary: #252552;
+    --clr_primary_shade_a: #353575;
+    --clr_primary_shade_b: #454598;
+    --clr_primary_shade_c: #5B5BB5;
+
+    --clr_secondary: #E0AC19;
+    --clr_secondary_shade_a: #EABE42;
+    --clr_secondary_darkened: #B88C14;
+
+    --clr_positive: #068453;
+    --clr_negative: #DD3636;
+
+    --clr_dark: #191919;
+    --clr_light: #F3F3F3;
+
+    --clr_grey_shade_a: #444444;
+    --clr_grey_shade_b: #666666;
+    --clr_grey_shade_c: #999999;
+    --clr_grey_shade_d: #CCCCCC;
+    --clr_grey_shade_e: #ECECEC;
+
+    /* Breakpoints */
+    /* Using em unit due to safari bugs */
+    --bp_xsmall: 40em; /* 640px */
+    --bp_small: 48em; /* 768px */
+    --bp_medium: 64em; /* 1024px */
+    --bp_large: 85.375em; /* 1366px */
+    --bp_xlarge: 120em; /* 1920px */
+    --bp_xxlarge: 160em; /* 2560px */
+
+    /* Typogrphy */
+    --font_primary: nunitoSans, sans-serif;
+
+    /* Safe Zones */
+    --safe_zone_desktop: 64em;
+    --safe_zone_tablet: 92%;
+
+    /* Major Third Typography */
+    --type_scale_5: 2.441rem;
+    --type_scale_4: 1.953rem;
+    --type_scale_3: 1.563rem;
+    --type_scale_2: 1.25rem;
+    --type_scale_1: 1rem;
+
+    /* Filters */
+    --filter_clr_primary: invert(13%) sepia(44%) saturate(985%) hue-rotate(203deg) brightness(98%) contrast(96%);
+    --filter_clr_primary_shade_a: invert(16%) sepia(26%) saturate(3578%) hue-rotate(218deg) brightness(92%) contrast(91%);
+    --filter_clr_primary_shade_b: invert(31%) sepia(45%) saturate(689%) hue-rotate(197deg) brightness(92%) contrast(90%);
+    --filter_clr_primary_shade_c: invert(66%) sepia(8%) saturate(2184%) hue-rotate(194deg) brightness(78%) contrast(89%);
+
+    --filter_clr_secondary: invert(86%) sepia(10%) saturate(6979%) hue-rotate(348deg) brightness(92%) contrast(90%);
+    --filter_clr_secondary_shade_a: invert(89%) sepia(38%) saturate(2797%) hue-rotate(326deg) brightness(104%) contrast(91%);
+
+    --filter_clr_positive: invert(35%) sepia(91%) saturate(714%) hue-rotate(116deg) brightness(87%) contrast(95%);
+    --filter_clr_negative: invert(25%) sepia(84%) saturate(1826%) hue-rotate(339deg) brightness(98%) contrast(96%);
+
+    --filter_clr_grey_shade_a: invert(19%) sepia(0%) saturate(0%) hue-rotate(160deg) brightness(135%) contrast(97%);
+    --filter_clr_grey_shade_b: invert(45%) sepia(0%) saturate(975%) hue-rotate(212deg) brightness(86%) contrast(89%);
+    --filter_clr_grey_shade_c: invert(74%) sepia(0%) saturate(1083%) hue-rotate(134deg) brightness(84%) contrast(84%);
+    --filter_clr_grey_shade_d: invert(100%) sepia(0%) saturate(5592%) hue-rotate(334deg) brightness(117%) contrast(60%);
+    --filter_clr_grey_shade_e: invert(97%) sepia(0%) saturate(2153%) hue-rotate(214deg) brightness(118%) contrast(85%);
+    --filter_clr_grey_shade_f: invert(99%) sepia(79%) saturate(166%) hue-rotate(243deg) brightness(114%) contrast(94%);
+
+}
+
+:root .dark {
+    --clr_positive: #0AE691;
+    --clr_negative: #FF4D4D;
+}
