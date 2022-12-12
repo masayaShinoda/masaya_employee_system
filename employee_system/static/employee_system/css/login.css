@@ -1,0 +1,28 @@
+.login_wrapper {
+    width: 100%;
+    max-width: min(calc(var(--safe_zone_desktop) / 2), 100%);
+
+    margin: 5rem auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    /* outline: 1px solid red; */
+}
+.login_wrapper header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+.login_wrapper h2 {
+    font-size: var(--type_scale_3);
+    margin-bottom: .325rem;
+}
+.login_wrapper form {
+    width: 100%;
+}
+.login_wrapper form input {
+    padding: .5rem .25rem;
+}

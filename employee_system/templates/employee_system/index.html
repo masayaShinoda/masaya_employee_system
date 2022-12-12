@@ -38,7 +38,11 @@
         {% if data.leave_balance %}
             <div id="root_pie_charts"></div>
         {% else %}
-        <p>Could not retreive leave balance. Please try again or contact technology department.</p>
+        <span class="message_toast">
+            <i class="icon icon_information"></i>
+            <h5>Leave Balance Not Found</h5>
+            <p>Please try again or contact technology department.</p>
+        </span>
         {% endif %}
     </section>
 </main>

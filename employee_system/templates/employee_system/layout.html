@@ -12,12 +12,14 @@
     <header class="nav navbar_container">
         <div>
             <section class="nav section_logo">
-                <img
-                src="{% static 'employee_system/images/zu_horizontal_logo.svg' %}"
-                alt="Zillion United logo"
-                width="221"
-                height="48"
-                >
+                <a href="{% url 'index' %}">
+                    <img
+                    src="{% static 'employee_system/images/zu_horizontal_logo.svg' %}"
+                    alt="Zillion United logo"
+                    width="221"
+                    height="48"
+                    >
+                </a>
             </section>
             <section class="nav section_links">
                 <nav>

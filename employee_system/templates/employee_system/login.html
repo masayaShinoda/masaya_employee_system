@@ -1,17 +1,20 @@
 {% extends "employee_system/layout.html" %}
 
 {% block body %}
+    <section class="login_wrapper">
+        <header>
+            <h2>Sign In</h2>
+            <p>Please use your assigned unique username.</p>
+        </header>
 
-    <h2>Login</h2>
-
-    {% if message %}
-        <div>{{ message }}</div>
-    {% endif %}
-
-    <form action="{% url 'login' %}" method="post">
-        {% csrf_token %}
-            <input autofocus type="text" name="username" placeholder="Username">
-            <input type="password" name="password" placeholder="Password">
-            <input type="submit" value="Login">
-    </form>
+        <form action="{% url 'login' %}" method="post">
+            {% csrf_token %}
+                <input autofocus type="text" name="username" placeholder="Username">
+                <input type="password" name="password" placeholder="Password">
+                <input type="submit" value="Login">
+        </form>
+        {% if message %}
+            <p>{{ message }}</p>
+        {% endif %}
+    </section>
 {% endblock %}
