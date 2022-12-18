@@ -45,6 +45,31 @@
         </span>
         {% endif %}
     </section>
+    <section class="section_calendars">
+        {% comment %} {% for month in data.calendars %}
+            <div class="calendar">
+                {{ month | safe }}
+            </div>
+        {% endfor %} {% endcomment %}
+        {% if data.months_calendar_this_year %}
+            {% for month in data.months_calendar_this_year %}
+                <div class="calendar">
+                    {{ month | safe }}
+                </div>                
+            {% endfor %}
+
+        {% endif %}
+
+        {% comment %} <div class="calendar">
+            <h5>Last Month</h5>
+        </div>
+        <div class="calendar">
+            <h5>This Month</h5>
+        </div>
+        <div class="calendar">
+            <h5>Next Month</h5>
+        </div> {% endcomment %}
+    </section>
 </main>
 {% else %}
 <main>

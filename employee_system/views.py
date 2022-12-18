@@ -6,6 +6,10 @@ from .models import LeaveBalance
 
 from django.core import serializers
 
+from datetime import date
+import calendar
+
+
 # Create your views here.
 def index(request):
     if request.user.is_authenticated:
@@ -14,6 +18,19 @@ def index(request):
         except LeaveBalance.DoesNotExist:
             leave_balance = None
 
+        this_month = date.today().month
+        this_year = date.today().year
+
+        html_calendar = calendar.HTMLCalendar()
+
+        calendar_this_month = html_calendar.formatmonth(this_year, this_month)
+
+        months_calendar_this_year = []
+
+        for month in range(1,13):
+            months_calendar_this_year.append(html_calendar.formatmonth(this_year, month))
+        
+
         context = {
             'metadata': {
                 'author': 'Masaya Shida',
@@ -21,6 +38,9 @@ def index(request):
             },
             'data': {
                 'leave_balance': leave_balance,
+                'months_calendar_this_year': months_calendar_this_year,
+                # 'calendar_this_month': calendar_this_month,
+                # 'calendar': html_calendar.formatmonth(this_year, this_month),
             },
             'misc': {
             },
