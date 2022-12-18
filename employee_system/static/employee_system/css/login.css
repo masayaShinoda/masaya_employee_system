@@ -1,6 +1,6 @@
 .login_wrapper {
     width: 100%;
-    max-width: min(calc(var(--safe_zone_desktop) / 2), 100%);
+    max-width: min(calc(var(--safe_zone_desktop) / 2.5), 100%);
 
     margin: 5rem auto;
     display: flex;
@@ -8,6 +8,11 @@
     align-items: flex-start;
 
     /* outline: 1px solid red; */
+}
+@media screen and (max-width: 48em) {
+    .login_wrapper {
+        padding: 0 1rem;
+    }
 }
 .login_wrapper header {
     display: flex;
@@ -22,7 +27,47 @@
 }
 .login_wrapper form {
     width: 100%;
+    display: grid;
+    grid-template-columns: 1;
+    grid-template-rows: 2;
 }
-.login_wrapper form input {
-    padding: .5rem .25rem;
+.login_wrapper form input[type="text"],
+.login_wrapper form input[type="password"] {
+    padding: .875rem .75rem;
+    border-radius: .5rem;
+    margin: .5rem 0;
+    outline: none;
+    border: 2px solid rgba(0,0,0,0);
+    background-color: var(--clr_grey_shade_e);
+}
+.login_wrapper form input[type="text"]:focus,
+.login_wrapper form input[type="text"]:active,
+.login_wrapper form input[type="password"]:focus,
+.login_wrapper form input[type="password"]:active {
+    border-color: var(--clr_primary_shade_a);
+}
+.login_wrapper input[type=submit] {
+    margin: 1rem 0;
+    appearance: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+
+.login_msg {
+    margin: 1rem 0;
+    font-size: 1rem;
+    display: inline-flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.login_msg.login_msg__error {
+    color: var(--clr_negative);
+}
+.login_msg .icon {
+    width: .875rem;
+    height: .875rem;
+    filter: var(--filter_clr_negative);
+    margin-right: .325rem;
 }

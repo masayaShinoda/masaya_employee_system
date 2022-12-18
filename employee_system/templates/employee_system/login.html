@@ -11,10 +11,14 @@
             {% csrf_token %}
                 <input autofocus type="text" name="username" placeholder="Username">
                 <input type="password" name="password" placeholder="Password">
-                <input type="submit" value="Login">
+                <br />
+                <input type="submit" value="Submit" class="btn_main utils bg_gradient_primary">
         </form>
         {% if message %}
-            <p>{{ message }}</p>
+            <span class="login_msg login_msg__error">
+                {% comment %} <i class="icon icon_information"></i> {% endcomment %}
+                <p>{{ message }}</p>
+            </span>
         {% endif %}
     </section>
 {% endblock %}

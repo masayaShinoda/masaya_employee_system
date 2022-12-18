@@ -21,57 +21,43 @@
                     >
                 </a>
             </section>
+            {% if user.is_authenticated %}
             <section class="nav section_links">
                 <nav>
                     <a href="#" class="utils clr_primary_shade_a">
                         Overview
                     </a>
-                    <a href="#" class="utils clr_primary_shade_a">
+                    {% comment %} <a href="#" class="utils clr_primary_shade_a">
                         Calendar
+                    </a> {% endcomment %}
+                    <a href="#" class="utils clr_primary_shade_a">
+                        Account
                     </a>
-                    {% if user.is_authenticated %}
-                        <a href="{% url 'logout' %}" class="utils clr_primary_shade_a">
-                            Sign Out
-                        </a>
-                    {% else %}
-                        <a href="{% url 'login' %}" class="utils clr_primary_shade_a">
-                            Sign In
-                        </a>
-                    {% endif %}
+                    <a href="{% url 'logout' %}" class="utils clr_primary_shade_a">
+                        Sign Out
+                    </a>
                 </nav>
             </section>
+            {% endif %}
+            {% if user.is_authenticated %}
             <section class="nav section_user utils bg_gradient_primary">
-                {% if user.is_authenticated %}
-                    <img
-                    src="{% static 'employee_system/images/zu_logo_56x56.png' %}"
-                    alt="No Profile Photo"
-                    width="40"
-                    height="40"
-                    >
-                    <span>
-                        {% if user.first_name and user.last_name %}
-                        <h5>{{ user.first_name }}&nbsp;{{ user.last_name }}</h5>
-                        {% else %}
-                        <h5>@{{ user.username }}</h5>
-                        {% endif %}
+                <img
+                src="{% static 'employee_system/images/zu_logo_56x56.png' %}"
+                alt="No Profile Photo"
+                width="40"
+                height="40"
+                >
+                <span>
+                    {% if user.first_name and user.last_name %}
+                    <h5>{{ user.first_name }}&nbsp;{{ user.last_name }}</h5>
+                    {% else %}
+                    <h5>@{{ user.username }}</h5>
+                    {% endif %}
 
-                        <p>{{ user.email }}</p>
-                    </span>
-                {% else %}
-                    <img
-                    src="{% static 'employee_system/images/zu_logo_56x56.png' %}"
-                    alt="No Profile Photo"
-                    width="40"
-                    height="40"
-                    >
-                    <a href={% url 'login' %}>
-                        <span>
-                            <h5>Sign In</h5>
-                            <p>Click here to continue.</p>
-                        </span>
-                    </a>
-                {% endif %}
+                    <p>{{ user.email }}</p>
+                </span>
             </section>
+            {% endif %}
         </div>
 
         
