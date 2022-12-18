@@ -212,7 +212,7 @@
         padding: 0;
     }
 }
-@media screen and (max-width: 48em) {
+@media screen and (max-width: 40em) {
     .pie_chart_cards_wrapper {
         grid-template-columns: repeat(4, 80vw);
     }
@@ -311,4 +311,27 @@
     font-weight: 700;
     font-size: var(--type_scale_2);
     margin: .25rem 0;
+}
+
+
+.section_calendars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+    max-width: 100%;
+    margin: 3.25rem 0 2.5rem 0;
+}
+.section_calendars .calendar {
+    width: 100%;
+    
+    /* outline: 1px solid red; */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+.section_calendars .calendar .columns {
+    display: grid;
+    grid-template-columns: repeat(7, 1rem);
+    grid-template-rows: repeat(7, 1rem);
 }
