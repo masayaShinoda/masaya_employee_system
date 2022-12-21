@@ -53,7 +53,7 @@
         {% endfor %} {% endcomment %}
         {% if data.months_calendar_this_year %}
             {% for month in data.months_calendar_this_year %}
-                <div class="calendar">
+                <div class="calendar" id="month-{{forloop.counter}}">
                     {{ month | safe }}
                 </div>                
             {% endfor %}
@@ -92,40 +92,40 @@
             app.appendChild(pie_chart_cards_wrapper)
 
             // Organize data from Django
-            let leave_data = {{ data.leave_balance | safe }}[0]['fields']
-            delete leave_data['user']
+            let leave_balance_data = {{ data.leave_balance | safe }}[0]['fields']
+            delete leave_balance_data['user']
 
             let leave_annual = {
                 id: "leave_annual",
                 name: "Annual Leave",
-                starting: leave_data.starting_leave_annual,
-                planned: leave_data.planned_leave_annual,
-                used: leave_data.used_leave_annual,
-                available: leave_data.starting_leave_annual - leave_data.planned_leave_annual - leave_data.used_leave_annual,
+                starting: leave_balance_data.starting_leave_annual,
+                planned: leave_balance_data.planned_leave_annual,
+                used: leave_balance_data.used_leave_annual,
+                available: leave_balance_data.starting_leave_annual - leave_balance_data.planned_leave_annual - leave_balance_data.used_leave_annual,
             }
             let leave_sick = {
                 id: "leave_sick",
                 name: "Sick Leave",
-                starting: leave_data.starting_leave_sick,
-                planned: leave_data.planned_leave_sick,
-                used: leave_data.used_leave_sick,
-                available: leave_data.starting_leave_sick - leave_data.planned_leave_sick - leave_data.used_leave_sick,
+                starting: leave_balance_data.starting_leave_sick,
+                planned: leave_balance_data.planned_leave_sick,
+                used: leave_balance_data.used_leave_sick,
+                available: leave_balance_data.starting_leave_sick - leave_balance_data.planned_leave_sick - leave_balance_data.used_leave_sick,
             }
             let leave_work_home = {
                 id: "leave_work_home",
                 name: "Work From Home",
-                starting: leave_data.starting_leave_work_home,
-                planned: leave_data.planned_leave_work_home,
-                used: leave_data.used_leave_work_home,
-                available: leave_data.starting_leave_work_home - leave_data.planned_leave_work_home - leave_data.used_leave_work_home,
+                starting: leave_balance_data.starting_leave_work_home,
+                planned: leave_balance_data.planned_leave_work_home,
+                used: leave_balance_data.used_leave_work_home,
+                available: leave_balance_data.starting_leave_work_home - leave_balance_data.planned_leave_work_home - leave_balance_data.used_leave_work_home,
             }
             let leave_maternity = {
                 id: "leave_maternity",
                 name: "Maternity Leave",
-                starting: leave_data.starting_leave_maternity,
-                planned: leave_data.planned_leave_maternity,
-                used: leave_data.used_leave_maternity,
-                available: leave_data.starting_leave_maternity - leave_data.planned_leave_maternity - leave_data.used_leave_maternity,
+                starting: leave_balance_data.starting_leave_maternity,
+                planned: leave_balance_data.planned_leave_maternity,
+                used: leave_balance_data.used_leave_maternity,
+                available: leave_balance_data.starting_leave_maternity - leave_balance_data.planned_leave_maternity - leave_balance_data.used_leave_maternity,
             }
             
             let all_leave = [leave_annual, leave_sick, leave_work_home, leave_maternity]
@@ -215,6 +215,54 @@
                 }
             )
    
+            // Handle leave model
+            // Organize data from Django
+            let leave_data = {{ data.leave | safe }}
+            leave_data.map(
+                (leave, i) => {
+                    delete leave_data[i]['fields']['user']
+                }
+            )
+
+            // console.log(leave_data)
+
+            leave_data.map(
+                (leave, i) => {
+                    leave_year = (new Date(leave.fields.leave_date)).getFullYear()
+
+                    // only continue if leave year is equal to current year
+                    if(leave_year === new Date().getFullYear()) {
+                        leave_month = (new Date(leave.fields.leave_date)).getMonth() + 1
+                        leave_date = (new Date(leave.fields.leave_date)).getDate()
+
+                        console.log(new Date().getDate() > leave_date) 
+                            
+                        if(leave_date > new Date().getDate()) {
+                            leave_status = "Planned"
+                        } else {
+                            leave_status = "Taken"
+                        }
+                        
+                        // $id(`month-${leave_month}`).style.outline = "2px solid red"
+                        Array.from(
+                            $id(`month-${leave_month}`).querySelector("table").querySelector("tbody").querySelectorAll("td")
+                        ).map(
+                            node => {
+                                if(node.textContent.trim() ===  leave_date.toString()) {
+                                    if(leave_status === "Planned") {
+                                        node.classList.add("planned")
+                                    } else if(leave_status === "Taken") {
+                                        node.classList.add("taken")
+                                    }
+    
+                                }
+                            }
+                        )
+                    }
+                }
+            )
+            
+
         }
     })
     

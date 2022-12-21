@@ -1,5 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+import datetime
+from django.core.validators import MinValueValidator
+
 
 # Create your models here.
 class MyUser(AbstractUser):
@@ -30,4 +33,23 @@ class LeaveBalance(models.Model):
     def __str__(self):
         return f"""
         {self.id}. {self.user.username}'s Remaining Balance: Annual: {self.starting_leave_annual - self.used_leave_annual} | Sick: {self.starting_leave_sick - self.used_leave_sick} | Home: {self.starting_leave_work_home - self.used_leave_work_home} | Maternity: {self.starting_leave_maternity - self.used_leave_maternity}
+        """
+
+class Leave(models.Model):
+    user = models.ForeignKey(MyUser, verbose_name=("user"), on_delete=models.CASCADE)
+    
+    LEAVE_TYPES = (
+        ("Annual Leave", "Annual Leave"),
+        ("Sick Leave", "Sick Leave"),
+        ("Work From Home", "Work From Home"),
+        ("Maternity Leave", "Maternity Leave"),
+    )
+
+    leave_type = models.CharField(max_length=32, choices=LEAVE_TYPES, default="Annual Leave")
+    leave_date = models.DateField(validators=[MinValueValidator(datetime.date.today)])
+
+
+    def __str__(self):
+        return f"""
+        {self.id}. {self.user.username} ({self.leave_type}) {self.leave_date}
         """

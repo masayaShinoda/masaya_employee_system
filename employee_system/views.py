@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render
 from django.urls import reverse
-from .models import LeaveBalance
+from .models import LeaveBalance, Leave
 
 from django.core import serializers
 
@@ -17,6 +17,10 @@ def index(request):
             leave_balance = serializers.serialize('json', [LeaveBalance.objects.all().get(user=request.user), ])
         except LeaveBalance.DoesNotExist:
             leave_balance = None
+        try:
+            leave = serializers.serialize('json', Leave.objects.all().filter(user=request.user))
+        except Leave.DoesNotExist:
+            leave = None
 
         this_month = date.today().month
         this_year = date.today().year
@@ -38,6 +42,7 @@ def index(request):
             },
             'data': {
                 'leave_balance': leave_balance,
+                'leave': leave,
                 'months_calendar_this_year': months_calendar_this_year,
                 # 'calendar_this_month': calendar_this_month,
                 # 'calendar': html_calendar.formatmonth(this_year, this_month),

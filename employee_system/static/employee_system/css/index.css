@@ -316,11 +316,11 @@
 
 .section_calendars {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     /* grid-template-rows: auto; */
     width: 100%;
     /* max-width: 100%; */
-    max-width: 64em;
+    max-width: var(--bp_large);
     gap: 2.5rem 1.5rem;
     margin: 3.25rem auto 2.5rem auto;
     padding: 2.5rem 1rem;
@@ -363,4 +363,13 @@
 .section_calendars .calendar th.sat,
 .section_calendars .calendar th.sun {
     color: var(--clr_grey_shade_b)
+}
+
+.section_calendars .calendar td.planned {
+    background-color: #FFAAAA;
+}
+.section_calendars .calendar td.taken {
+    background-color: #FF4D4D;
+    color: #fff;
+    border-radius: .25rem;
 }
