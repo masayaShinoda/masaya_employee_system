@@ -5,6 +5,7 @@ from django.urls import reverse
 from .models import LeaveBalance, Leave
 
 from django.core import serializers
+import json
 
 from datetime import date
 import calendar
@@ -22,18 +23,40 @@ def index(request):
         except Leave.DoesNotExist:
             leave = None
 
-        this_month = date.today().month
+        # this_month = date.today().month
         this_year = date.today().year
 
         html_calendar = calendar.HTMLCalendar()
-
-        calendar_this_month = html_calendar.formatmonth(this_year, this_month)
 
         months_calendar_this_year = []
 
         for month in range(1,13):
             months_calendar_this_year.append(html_calendar.formatmonth(this_year, month))
         
+        national_holidays = (
+            {'International New Year Day': date(this_year, 1, 1).strftime("%Y-%m-%d")},
+            {'Victory Day over Genocide': date(this_year, 1, 7).strftime("%Y-%m-%d")},
+            {'International Women\'s Day': date(this_year, 3, 8).strftime("%Y-%m-%d")},
+            {'Khmer New Year': date(this_year, 4, 14).strftime("%Y-%m-%d")},
+            {'Khmer New Year': date(this_year, 4, 15).strftime("%Y-%m-%d")},
+            {'Khmer New Year': date(this_year, 4, 16).strftime("%Y-%m-%d")},
+            {'International Labor Day': date(this_year, 5, 1).strftime("%Y-%m-%d")},
+            {'Visak Bochea Day': date(this_year, 5, 4).strftime("%Y-%m-%d")},
+            {'Royal Plowing Ceremony': date(this_year, 5, 8).strftime("%Y-%m-%d")},
+            {'King Norodom Sihamoni\'s Birthday': date(this_year, 5, 14).strftime("%Y-%m-%d")},
+            {'Queen Monineath\'s Birthday': date(this_year, 6, 18).strftime("%Y-%m-%d")},
+            {'Constitutional Day': date(this_year, 9, 24).strftime("%Y-%m-%d")},
+            {'Pchum Ben Festival': date(this_year, 10, 13).strftime("%Y-%m-%d")},
+            {'Pchum Ben Festival': date(this_year, 10, 14).strftime("%Y-%m-%d")},
+            {'Pchum Ben Festival': date(this_year, 10, 15).strftime("%Y-%m-%d")},
+            {'Respect the spirit of the late King Father': date(this_year, 10, 15).strftime("%Y-%m-%d")},
+            {'Coronation Day of King Sihamoni': date(this_year, 10, 29).strftime("%Y-%m-%d")},
+            {'National Independence Day': date(this_year, 11, 9).strftime("%Y-%m-%d")},
+            {'Water Festival': date(this_year, 11, 26).strftime("%Y-%m-%d")},
+            {'Water Festival': date(this_year, 11, 27).strftime("%Y-%m-%d")},
+            {'Water Festival': date(this_year, 11, 28).strftime("%Y-%m-%d")},
+        )
+
 
         context = {
             'metadata': {
@@ -44,8 +67,7 @@ def index(request):
                 'leave_balance': leave_balance,
                 'leave': leave,
                 'months_calendar_this_year': months_calendar_this_year,
-                # 'calendar_this_month': calendar_this_month,
-                # 'calendar': html_calendar.formatmonth(this_year, this_month),
+                'national_holidays': json.dumps(national_holidays),
             },
             'misc': {
             },

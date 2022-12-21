@@ -45,19 +45,13 @@
         </span>
         {% endif %}
     </section>
-    <section class="section_calendars">
-        {% comment %} {% for month in data.calendars %}
-            <div class="calendar">
-                {{ month | safe }}
-            </div>
-        {% endfor %} {% endcomment %}
+    <section id="section_calendars" class="section_calendars">
         {% if data.months_calendar_this_year %}
             {% for month in data.months_calendar_this_year %}
                 <div class="calendar" id="month-{{forloop.counter}}">
                     {{ month | safe }}
                 </div>                
             {% endfor %}
-
         {% endif %}
 
         {% comment %} <div class="calendar">
@@ -215,6 +209,19 @@
                 }
             )
    
+
+            // Highlight <th> of the calendar div of the current month
+            Array.from($id("section_calendars").querySelectorAll(".calendar")).map(
+                month_div => {
+                    if(parseInt(month_div.id.slice(6)) === (new Date().getMonth() + 1)) {
+                        month_div.classList.add("active")
+                    } else if (parseInt(month_div.id.slice(6)) > (new Date().getMonth() + 1)) {
+                        month_div.classList.add("future")
+                    }
+                }
+            )
+                
+
             // Handle leave model
             // Organize data from Django
             let leave_data = {{ data.leave | safe }}
@@ -223,8 +230,8 @@
                     delete leave_data[i]['fields']['user']
                 }
             )
-
             // console.log(leave_data)
+
 
             leave_data.map(
                 (leave, i) => {
@@ -234,7 +241,8 @@
                     if(leave_year === new Date().getFullYear()) {
                         leave_month = (new Date(leave.fields.leave_date)).getMonth() + 1
                         leave_date = (new Date(leave.fields.leave_date)).getDate()
-
+                        leave_type = leave.fields.leave_type
+                        
                         console.log(new Date().getDate() > leave_date) 
                             
                         if(leave_date > new Date().getDate()) {
@@ -251,16 +259,41 @@
                                 if(node.textContent.trim() ===  leave_date.toString()) {
                                     if(leave_status === "Planned") {
                                         node.classList.add("planned")
+                                        node.setAttribute("title", `${leave_type} (${leave_status})`)
                                     } else if(leave_status === "Taken") {
                                         node.classList.add("taken")
+                                        node.setAttribute("title", `${leave_type} (${leave_status})`)
                                     }
-    
                                 }
                             }
                         )
                     }
                 }
             )
+
+            // Handle national holidays
+            let national_holidays = {{ data.national_holidays | safe }}
+            national_holidays.map(holiday => {
+                // console.table(Object.keys(holiday)[0], Object.values(holiday)[0])
+                holiday_year = (new Date(Object.values(holiday)[0])).getFullYear()
+
+                // only continue if holiday year is equal to current year
+                if(holiday_year === new Date().getFullYear()) {
+                    holiday_month = (new Date(Object.values(holiday)[0])).getMonth() + 1
+                    holiday_date = (new Date(Object.values(holiday)[0])).getDate()
+                    
+                    Array.from(
+                        $id(`month-${holiday_month}`).querySelector("table").querySelector("tbody").querySelectorAll("td")
+                    ).map(
+                        node => {
+                            if(node.textContent.trim() ===  holiday_date.toString()) {
+                                node.classList.add("holiday")
+                                node.setAttribute("title", Object.keys(holiday)[0])
+                            }
+                        }
+                    )
+                }
+            })
             
 
         }
