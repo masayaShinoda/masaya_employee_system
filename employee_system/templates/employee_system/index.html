@@ -30,7 +30,9 @@
                 </span>
             </div>
             <div class="section_greetings_buttons_wrapper">
-                
+                <button class="btn_main utils bg_gradient_primary_shade_a" onclick="toggleBookModal()">
+                    Book Leave →
+                </button>
             </div>
         </div>
     </section>
@@ -45,6 +47,16 @@
         </span>
         {% endif %}
     </section>
+    <div class="section_calendars_header">
+        <header>
+            <h2>Calendar</h2>
+        </header>
+        <div class="calendar_legends_container">
+            <p class="calendar_legend national_holiday">National Holiday</p>
+            <p class="calendar_legend planned_leave">Planned Leave</p>
+            <p class="calendar_legend leave_taken">Leave Taken</p>
+        </div>
+    </div>
     <section id="section_calendars" class="section_calendars">
         {% if data.months_calendar_this_year %}
             {% for month in data.months_calendar_this_year %}
@@ -64,6 +76,38 @@
             <h5>Next Month</h5>
         </div> {% endcomment %}
     </section>
+
+    
+    <div id="book_leave_modal" class="modal book_leave_modal">
+        <div class="modal_outside" onclick="toggleBookModal()"></div>
+        <div class="modal_content">
+            <header>
+                <h2>Book Leave</h2>
+                <button 
+                onclick="toggleBookModal()"
+                class="modal_btn_close btn_main utils clr_primary">
+                    &times;
+                </button>
+            </header>
+            <section class="modal_body">
+                <div>
+                    <!-- 
+                    {% comment %} <form action="{% url 'book_leave' %}" method="post"> {% endcomment %}
+                        {% csrf_token %}
+                        <label>
+                            From:
+                            <input type="date" name="date_start" />
+                        </label>
+                        <label>
+                            To:
+                            <input type="date" name="date_start" />
+                        </label>
+                    </form>
+                    -->
+                </div>
+            </section>
+        </div>
+    <div>
 </main>
 {% else %}
 <main>
@@ -72,7 +116,15 @@
 {% endif %}
 
 
-
+<script>
+// Handle Book Leave modal
+function toggleBookModal() {
+    var $id = (id) => document.getElementById(id)
+    book_leave_modal = $id('book_leave_modal')
+    book_leave_modal.toggleAttribute('active')
+    document.body.toggleAttribute('locked')
+}
+</script>
 <script defer src="{% static 'employee_system/js/chart.js-4.0.1/package/dist/chart.umd.min.js' %}"></script>
 <script type="text/javascript">
     window.addEventListener('DOMContentLoaded', (event) => {
@@ -211,10 +263,19 @@
    
 
             // Highlight <th> of the calendar div of the current month
+            // Outline <td> of the today 
             Array.from($id("section_calendars").querySelectorAll(".calendar")).map(
                 month_div => {
                     if(parseInt(month_div.id.slice(6)) === (new Date().getMonth() + 1)) {
                         month_div.classList.add("active")
+                        Array.from(month_div.querySelectorAll("td")).map(
+                            td => {
+                                // console.table(td.textContent, (new Date().getDate()).toString())
+                                if(td.textContent === (new Date().getDate()).toString()) {
+                                    td.style.outline = "2px solid #252552"
+                                }
+                            }
+                        )
                     } else if (parseInt(month_div.id.slice(6)) > (new Date().getMonth() + 1)) {
                         month_div.classList.add("future")
                     }
@@ -243,7 +304,7 @@
                         leave_date = (new Date(leave.fields.leave_date)).getDate()
                         leave_type = leave.fields.leave_type
                         
-                        console.log(new Date().getDate() > leave_date) 
+                        // console.log(new Date().getDate() > leave_date) 
                             
                         if(leave_date > new Date().getDate()) {
                             leave_status = "Planned"
@@ -259,10 +320,10 @@
                                 if(node.textContent.trim() ===  leave_date.toString()) {
                                     if(leave_status === "Planned") {
                                         node.classList.add("planned")
-                                        node.setAttribute("title", `${leave_type} (${leave_status})`)
+                                        node.setAttribute("data-tooltip", `${leave_type} (${leave_status})`)
                                     } else if(leave_status === "Taken") {
                                         node.classList.add("taken")
-                                        node.setAttribute("title", `${leave_type} (${leave_status})`)
+                                        node.setAttribute("data-tooltip", `${leave_type} (${leave_status})`)
                                     }
                                 }
                             }
@@ -288,7 +349,7 @@
                         node => {
                             if(node.textContent.trim() ===  holiday_date.toString()) {
                                 node.classList.add("holiday")
-                                node.setAttribute("title", Object.keys(holiday)[0])
+                                node.setAttribute("data-tooltip", Object.keys(holiday)[0])
                             }
                         }
                     )

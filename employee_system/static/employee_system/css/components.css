@@ -16,6 +16,7 @@
     transition: background-color 200ms ease-out, filter 200ms ease-out;
     /* outline: 1px solid red; */
     color: var(--clr_light);
+    cursor: pointer;
 }
 .btn_main .icon {
     margin-left: .375rem;

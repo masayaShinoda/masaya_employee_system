@@ -109,3 +109,11 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("login"))
+
+# def book_leave(request):
+#     # If user is already signed in and requests login page, redirect to index
+#     if request.user.is_authenticated:
+#         if request.method == "POST":
+#             # store form data as variables
+#             date_start = request.POST["date_start"]
+#             date_end = request.POST["date_end"]
