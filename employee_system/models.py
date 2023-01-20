@@ -46,10 +46,15 @@ class Leave(models.Model):
     )
 
     leave_type = models.CharField(max_length=32, choices=LEAVE_TYPES, default="Annual Leave")
-    leave_date = models.DateField(validators=[MinValueValidator(datetime.date.today)])
-
+    leave_start = models.DateField(validators=[MinValueValidator(datetime.date.today)], default=datetime.date.today)
+    leave_until = models.DateField(validators=[MinValueValidator(datetime.date.today)], default=datetime.date.today)
+    leave_reason = models.CharField(max_length=128, default="No reason given.")
+    # leave = {
+    #     'leave_start': leave_start,
+    #     'leave_end': leave_until,
+    # }
 
     def __str__(self):
         return f"""
-        {self.id}. {self.user.username} ({self.leave_type}) {self.leave_date}
+        {self.id}. {self.user.username} ({self.leave_type}) {self.leave_start} {self.leave_until}
         """

@@ -1,4 +1,5 @@
 from django.http import HttpResponseRedirect
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render
 from django.urls import reverse
@@ -9,6 +10,8 @@ import json
 
 from datetime import date
 import calendar
+
+from .forms import BookLeaveForm
 
 
 # Create your views here.
@@ -68,6 +71,7 @@ def index(request):
                 'leave': leave,
                 'months_calendar_this_year': months_calendar_this_year,
                 'national_holidays': json.dumps(national_holidays),
+                'book_leave_form': BookLeaveForm(),
             },
             'misc': {
             },
@@ -78,6 +82,23 @@ def index(request):
     # If user is not signed in and requests index page, redirect to login
     else:
         return HttpResponseRedirect(reverse("login"))
+
+
+def book_leave(request):
+    if request.user.is_authenticated:
+        form = BookLeaveForm(request.POST)
+        if form.is_valid():
+            leave = Leave(
+                user = request.user,
+                leave_start = form.cleaned_data['leave_start'],
+                leave_until = form.cleaned_data['leave_until'],
+                leave_type = form.cleaned_data['leave_type'],
+                leave_reason = form.cleaned_data['leave_reason'],
+            ) # Leave model
+            leave.save()
+
+            return HttpResponseRedirect(reverse("index"))
+        # Todo: handle bad submissions
 
 
 def login_view(request):

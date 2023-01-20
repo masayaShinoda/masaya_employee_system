@@ -77,6 +77,8 @@
         </div> {% endcomment %}
     </section>
 
+
+
     
     <div id="book_leave_modal" class="modal book_leave_modal">
         <div class="modal_outside" onclick="toggleBookModal()"></div>
@@ -91,19 +93,11 @@
             </header>
             <section class="modal_body">
                 <div>
-                    <!-- 
-                    {% comment %} <form action="{% url 'book_leave' %}" method="post"> {% endcomment %}
+                    <form action="{% url 'book_leave' %}" method="post">
                         {% csrf_token %}
-                        <label>
-                            From:
-                            <input type="date" name="date_start" />
-                        </label>
-                        <label>
-                            To:
-                            <input type="date" name="date_start" />
-                        </label>
+                        {{ data.book_leave_form }}
+                        <button type="submit" class="btn_main utils bg_gradient_primary_shade_a">Submit</button>
                     </form>
-                    -->
                 </div>
             </section>
         </div>
@@ -114,6 +108,7 @@
     <h2>Please Sign In</h2>
 </main>
 {% endif %}
+
 
 
 <script>
@@ -129,8 +124,43 @@ function toggleBookModal() {
 <script type="text/javascript">
     window.addEventListener('DOMContentLoaded', (event) => {
         window.onload = async function() {
-            var $id = (id) => document.getElementById(id)
+            let $id = (id) => document.getElementById(id)
+            var getDaysArray = function(start, end) {
+                for(var arr=[],dt=new Date(start); dt<=new Date(end); dt.setDate(dt.getDate()+1)) {
+                    arr.push(new Date(dt))
+                }
+                return arr;
+            }
+
+            function validateDateInput(event, date, day) {
+                // prevent lesser than yesterday
+                if(date < (new Date)) {
+                    event.preventDefault()
+                    event.target.value = ''
+                    alert("You can't go back in time!")
+                }
+                // prevent sundays
+                if(day === 0) {
+                    event.preventDefault()
+                    event.target.value = ''
+                    alert('Sunday not allowed')
+                }
+            }
+
+            $id("leave_start_date_input").addEventListener('input', function(event){
+                var date = new Date(this.value)
+                var day = new Date(this.value).getUTCDay()
+                
+                validateDateInput(event, date, day)
+            })
+            $id("leave_until_date_input").addEventListener('input', function(event){
+                var date = new Date(this.value)
+                var day = new Date(this.value).getUTCDay()
+                
+                validateDateInput(event, date, day)
+            })
             
+
             const app = $id('root_pie_charts')
             const pie_chart_cards_wrapper = document.createElement('div')
             pie_chart_cards_wrapper.classList.add("pie_chart_cards_wrapper")
@@ -273,6 +303,7 @@ function toggleBookModal() {
                                 // console.table(td.textContent, (new Date().getDate()).toString())
                                 if(td.textContent === (new Date().getDate()).toString()) {
                                     td.style.outline = "2px solid #252552"
+                                    td.setAttribute("data-tooltip", `Today`)
                                 }
                             }
                         )
@@ -296,28 +327,54 @@ function toggleBookModal() {
 
             leave_data.map(
                 (leave, i) => {
-                    leave_year = (new Date(leave.fields.leave_date)).getFullYear()
+                    console.log(i, leave.fields)   
+                    leave_year = (new Date(leave.fields.leave_start)).getFullYear()
 
                     // only continue if leave year is equal to current year
                     if(leave_year === new Date().getFullYear()) {
-                        leave_month = (new Date(leave.fields.leave_date)).getMonth() + 1
-                        leave_date = (new Date(leave.fields.leave_date)).getDate()
+                        // leave_month = (new Date(leave.fields.leave_date)).getMonth() + 1
+                        // leave_date = (new Date(leave.fields.leave_date)).getDate()
+                        leave_start = (new Date(leave.fields.leave_start))
+                        leave_until = (new Date(leave.fields.leave_until))
                         leave_type = leave.fields.leave_type
                         
-                        // console.log(new Date().getDate() > leave_date) 
-                            
-                        if(leave_date > new Date().getDate()) {
-                            leave_status = "Planned"
-                        } else {
-                            leave_status = "Taken"
-                        }
+                        leave_dates_array = Array.from(getDaysArray(leave_start, leave_until).map(date => date.getDate()))
+                        // create an array of dates between leave_start and leave_until
+                                        
+
                         
                         // $id(`month-${leave_month}`).style.outline = "2px solid red"
+                        
+                        leave_dates_array.map(
+                            leave_date => {
+                                Array.from(
+                                    $id("section_calendars").querySelector("table").querySelector("tbody").querySelectorAll("td")
+                                ).map(
+                                    node => {
+                                        // console.log(leave_date.toString(), node.textContent.trim())
+                                        if(node.textContent.trim() === leave_date.toString()) {
+                                            if(leave_date > (new Date().getDate())) {
+                                                let leave_status = "Planned"
+                                                node.classList.add("planned")
+                                                node.setAttribute("data-tooltip", `${leave_type} (${leave_status})`)
+                                                console.log(node)
+                                            } else if(leave_date <= (new Date().getDate())) {
+                                                let leave_status = "Taken"
+                                                node.classList.add("taken")
+                                                node.setAttribute("data-tooltip", `${leave_type} (${leave_status})`)
+                                            }
+                                        }
+                                    }
+                                )
+                            }
+                        )
+
+                        /*
                         Array.from(
-                            $id(`month-${leave_month}`).querySelector("table").querySelector("tbody").querySelectorAll("td")
+                            $id("section_calendars").querySelector("table").querySelector("tbody").querySelectorAll("td")
                         ).map(
                             node => {
-                                if(node.textContent.trim() ===  leave_date.toString()) {
+                                if(node.textContent.trim() ===  leave_start.toString() || node.textContent.trim() ===  leave_until.toString()) {
                                     if(leave_status === "Planned") {
                                         node.classList.add("planned")
                                         node.setAttribute("data-tooltip", `${leave_type} (${leave_status})`)
@@ -328,6 +385,7 @@ function toggleBookModal() {
                                 }
                             }
                         )
+                        */
                     }
                 }
             )
