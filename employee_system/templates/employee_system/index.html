@@ -92,13 +92,11 @@
                 </button>
             </header>
             <section class="modal_body">
-                <div>
                     <form action="{% url 'book_leave' %}" method="post">
                         {% csrf_token %}
                         {{ data.book_leave_form }}
                         <button type="submit" class="btn_main utils bg_gradient_primary_shade_a">Submit</button>
                     </form>
-                </div>
             </section>
         </div>
     <div>
